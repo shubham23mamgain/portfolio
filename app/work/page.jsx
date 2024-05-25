@@ -134,7 +134,7 @@ const Work = () => {
                 {projects[myIndex].category} Project
               </h2>
 
-              <p className="text-white/60">{project.description}</p>
+              <p className="text-white/60">{projects[myIndex].description}</p>
 
               <ul className="flex gap-4 flex-wrap">
                 {projects[myIndex].stack.map((item, index) => {
