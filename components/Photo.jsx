@@ -24,11 +24,11 @@ const Photo = () => {
           className="w-[298px] h-[298px] xl:w-[498px] xl:h-[498px] mix-blend-lighten absolute justify-center items-center"
         >
           <Image
-            src="/assets/goku.jpg"
+            src="/assets/ken.jpg"
             priority
             quality={100}
             fill
-            alt=""
+            alt="Ken Kaneki"
             className="object-contain"
           />
         </motion.div>
@@ -44,7 +44,7 @@ const Photo = () => {
             cx="253"
             cy="253"
             r="250"
-            stroke="#00ff"
+            stroke="#48d1cc"
             strokeWidth="4"
             strokeLinecap="round"
             strokeLinejoin="round"
