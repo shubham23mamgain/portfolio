@@ -36,8 +36,48 @@ const info = [
 ];
 
 import { motion } from "framer-motion";
+import { useFormik } from "formik";
+import * as yup from "yup";
+
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+yup.addMethod(yup.string, "email", function validateEmail(message) {
+  return this.matches(emailRegex, {
+    message,
+    name: "email",
+    excludeEmptyString: true,
+  });
+});
+
+const schema = yup.object().shape({
+  firstname: yup.string().required("First Name is required"),
+  lastname: yup.string().required("Last Name is required"),
+  email: yup.string().email("Invalid email!").required("Email is missing"),
+  phone: yup.string().required("Phone is required").min(10).max(10),
+});
 
 const Contact = () => {
+  const formik = useFormik({
+    initialValues: {
+      phone: "",
+      email: "",
+      firstname: "",
+      lastname: "",
+    },
+
+    // Pass the Yup schema to validate the form
+    validationSchema: schema,
+
+    // Handle form submission
+    onSubmit: async ({ firsname, email, lastname, phone }) => {
+      // Make a request to your backend to store the data
+    },
+  });
+  const { errors, touched, values, handleChange, handleSubmit } = formik;
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Hello from Shubham Mamgain");
+  // };
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -51,7 +91,10 @@ const Contact = () => {
         <div className="flex flex-col xl:flex-row gap-[30px]">
           {/*form*/}
           <div className="xl:w-[54%] order-2 xl:order-none">
-            <form className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl">
+            <form
+              className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl"
+              onSubmit={handleSubmit}
+            >
               <h3 className="text-4xl text-accent">Let's Work Together</h3>
               <p className="text-white/60">
                 I can convert your ideas into projects using latest technologies
@@ -59,10 +102,46 @@ const Contact = () => {
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input type="firstname" placeholder="Firstname" />
-                <Input type="lastname" placeholder="Lastname" />
-                <Input type="email" placeholder="Email" />
-                <Input type="phone" placeholder="Phone" />
+                <Input
+                  type="firstname"
+                  name="firstname"
+                  id="firstname"
+                  placeholder="Firstname"
+                  value={values.firstname}
+                  onChange={handleChange}
+                />
+                {errors.firstname && touched.firstname && (
+                  <span>{errors.firstname}</span>
+                )}
+                <Input
+                  name="lastname"
+                  id="lastname"
+                  type="lastname"
+                  placeholder="Lastname"
+                  value={values.lastname}
+                  onChange={handleChange}
+                />
+                {errors.lastname && touched.lastname && (
+                  <span>{errors.lastname}</span>
+                )}
+                <Input
+                  name="email"
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  value={values.email}
+                  onChange={handleChange}
+                />
+                {errors.email && touched.email && <span>{errors.email}</span>}
+                <Input
+                  name="phone"
+                  id="phone"
+                  type="phone"
+                  placeholder="Phone"
+                  value={values.phone}
+                  onChange={handleChange}
+                />
+                {errors.phone && touched.phone && <span>{errors.phone}</span>}
               </div>
 
               <Select>
@@ -89,7 +168,7 @@ const Contact = () => {
                 placeholder="Type your Message Here."
               />
 
-              <Button size="md" classNamemax-w-40>
+              <Button size="md" className="max-w-40" type="submit">
                 Send Message
               </Button>
             </form>
